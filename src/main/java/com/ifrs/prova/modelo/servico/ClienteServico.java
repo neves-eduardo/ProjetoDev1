@@ -25,7 +25,7 @@ public class ClienteServico extends Servico<Cliente> {
     ContatoDAO contatoDAO;
     @Autowired
     ClienteRN clienteRN;
-        @Autowired
+    @Autowired
     ContatoRN contatoRN;
     
     @Override
@@ -40,12 +40,10 @@ public class ClienteServico extends Servico<Cliente> {
 
     @Override
     public Cliente cadastrar(Cliente entidade) {
-        if(!entidade.getContatos().isEmpty()) {
-            for(Contato contato : entidade.getContatos()){
-            contatoRN.validarCadastrar(contato);
-            }
-        }
         clienteRN.validarCadastrar(entidade);
+        if (!(entidade.getContato() == null)){
+            contatoRN.validarCadastrar(entidade.getContato());
+        }
         return super.cadastrar(entidade); 
     }
     
@@ -54,42 +52,29 @@ public class ClienteServico extends Servico<Cliente> {
         contato.setId(0);
         contatoRN.validarCadastrar(contato);
         Contato contatoBanco = contatoDAO.save(contato);
-        cliente.getContatos().add(contatoBanco);
+        cliente.setContatos(contatoBanco);
         clienteDAO.save(cliente);
         return contatoBanco;
     }
 
     public Contato recuperarContato(int idCliente, int idContato) throws Throwable {
         Cliente cliente= this.recuperar(idCliente);
-        List<Contato> contatos = cliente.getContatos();
-        for (Contato contato : contatos) {
-            if (contato.getId() == idContato) {
-                return contato;
-            }
-        }
-        throw new NaoEncontrado("id " + idContato + " não foi encontrada");
+        return cliente.getContato();
     }
 
     public void atualizarContato(int idCliente, Contato contato) throws Throwable {
         this.recuperarContato(idCliente, contato.getId());
-        contatoRN.validarAtualizar(this.recuperarContato(idCliente, contato.getId()), contato);
+        contatoRN.validarCadastrar(contato);
         contatoDAO.save(contato);
     }
 
-    public List<Contato> listarContatos (int idCliente) throws Throwable {
-        return this.recuperar(idCliente).getContatos();
+    public Contato listarContatos (int idCliente) throws Throwable {
+        return this.recuperar(idCliente).getContato();
     }
     
         public void excluirContato(int idCliente, int idContato) throws Throwable {
-        Cliente cliente = this.recuperar(idCliente);
-        List<Contato> contatos = cliente.getContatos();
-        for (Contato contato : contatos) {
-            if (contato.getId() == idContato) {
-                cliente.getContatos().remove(contato);
-                clienteDAO.save(cliente);
-                return;
-            }
-        }
+            Contato contato = this.recuperar(idCliente).getContato();
+            contatoDAO.delete(contato);
         throw new NaoEncontrado("id " + idContato + " não foi encontrada");
     }
     

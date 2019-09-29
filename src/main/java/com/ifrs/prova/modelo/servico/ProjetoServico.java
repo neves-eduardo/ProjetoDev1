@@ -36,8 +36,8 @@ public class ProjetoServico extends Servico<Projeto>{
     ProjetoRN projetoRN;
     @Autowired
     AtividadeRN atividadeRN;
-    
-        @Override
+
+    @Override
     public CrudRepository<Projeto, Integer> getDAO() {
         return projetoDAO;
     }
@@ -49,43 +49,40 @@ public class ProjetoServico extends Servico<Projeto>{
 
     @Override
     public Projeto cadastrar(Projeto entidade) {
-              if(entidade.getAtividades()!=null) {
+        if(entidade.getAtividades()!=null) {
             for(Atividade atividade : entidade.getAtividades()){
-            atividadeRN.validarCadastrar(atividade);
+                atividadeRN.validarCadastrar(atividade);
             }}
         projetoRN.validarCadastrar(entidade);
-        for (Atividade atividade : entidade.getAtividades()) {
-            atividadeRN.validarCadastrar(atividade);
-        }
         entidade.setCliente(buscaCliente(entidade.getCliente()));
-        return super.cadastrar(entidade); 
+        return super.cadastrar(entidade);
     }
 
     @Override
     public void atualizar(Projeto entidade) {
-                     if(!entidade.getAtividades().isEmpty()) {
+        if(!entidade.getAtividades().isEmpty()) {
             for(Atividade atividade : entidade.getAtividades()){
-            atividadeRN.validarCadastrar(atividade);
+                atividadeRN.validarCadastrar(atividade);
             }}
         projetoRN.validarAtualizar(entidade, entidade);
         super.atualizar(entidade); //To change body of generated methods, choose Tools | Templates.
     }
-    	private Cliente buscaCliente (Cliente cliente) {
-		Optional<Cliente> clienteBuscado = clienteDAO.findById(cliente.getId());
-		if (clienteBuscado.isPresent()) {
-			return clienteBuscado.get();
-		}else { 
-			throw new NaoEncontrado("Clientenão encontrado");
-		}
-	}
-        
-        public Atividade cadastrarAtividade(int idProjeto, Atividade atividade) throws Throwable {
+    private Cliente buscaCliente (Cliente cliente) {
+        Optional<Cliente> clienteBuscado = clienteDAO.findById(cliente.getId());
+        if (clienteBuscado.isPresent()) {
+            return clienteBuscado.get();
+        }else {
+            throw new NaoEncontrado("Clientenão encontrado");
+        }
+    }
+
+    public Atividade cadastrarAtividade(int idProjeto, Atividade atividade) throws Throwable {
         Projeto projeto = this.recuperar(idProjeto);
         atividade.setId(0);
         atividadeRN.validarCadastrar(atividade);
         Atividade atividadeBanco = atividadeDAO.save(atividade);
         projeto.getAtividades().add(atividadeBanco);
-        
+
         projetoDAO.save(projeto);
         return atividadeBanco;
     }
@@ -104,15 +101,15 @@ public class ProjetoServico extends Servico<Projeto>{
     public void atualizarAtividade(int idProjeto, Atividade atividade) throws Throwable {
         this.recuperarAtividade(idProjeto, atividade.getId());
         atividadeRN.validarAtualizar(this.recuperarAtividade(idProjeto, atividade.getId()), atividade);
-        
+
         atividadeDAO.save(atividade);
     }
 
     public List<Atividade> listarAtividade (int idProjeto) throws Throwable {
         return this.recuperar(idProjeto).getAtividades();
     }
-    
-        public void excluirAtividade(int idProjeto, int idAtividade) throws Throwable {
+
+    public void excluirAtividade(int idProjeto, int idAtividade) throws Throwable {
         Projeto projeto = this.recuperar(idProjeto);
         List<Atividade> atividades = projeto.getAtividades();
         for (Atividade atividade : atividades) {
@@ -125,5 +122,5 @@ public class ProjetoServico extends Servico<Projeto>{
         throw new NaoEncontrado("id " + idAtividade + " não foi encontrada");
     }
 
-    
+
 }

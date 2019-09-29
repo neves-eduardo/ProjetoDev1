@@ -2,22 +2,18 @@
 package com.ifrs.prova.modelo.entidade;
 
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
 @Entity
 public class Cliente implements Entidade {
     @Id
-    @GeneratedValue(strategy = 
+    @GeneratedValue(strategy =
           GenerationType.IDENTITY)
     private int id;
     private String nome;
     private String cnpj;
-    @OneToMany (cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Contato> contatos;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Contato contato;
     public int getId() {
         return id;
     }
@@ -42,12 +38,11 @@ public class Cliente implements Entidade {
         this.cnpj = cnpj;
     }
 
-    public List<Contato> getContatos() {
-        return contatos;
+    public Contato getContato() {
+        return contato;
     }
 
-    public void setContatos(List<Contato> contatos) {
-        this.contatos = contatos;
+    public void setContatos(Contato contato) {
+        this.contato = contato;
     }
- 
 }

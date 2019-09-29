@@ -17,7 +17,7 @@ public class ClienteRN  implements RegraNegocio<Cliente>{
        } else if(entidade.getCnpj()==null) {
         throw new QuebraRegraNegocio("1001-:-" + " Cnpj é um campo obrigatório"); 
        } else if(entidade.getCnpj()==null||entidade.getCnpj().length()!=14) {
-       throw new QuebraRegraNegocio("1001-:-" + " Cnpj deve ter 14 caracteres");}
+       throw new QuebraRegraNegocio("1002-:-" + " Cnpj deve ter 14 caracteres");}
     }
 
     @Override

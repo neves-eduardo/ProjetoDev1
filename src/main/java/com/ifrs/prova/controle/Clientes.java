@@ -58,7 +58,7 @@ public class Clientes extends CRUDControle<Cliente> {
     
     @GetMapping("/{idCliente}/contatos/")
     @ResponseStatus(HttpStatus.OK)
-    public List<Contato> listarContatos(@PathVariable int idCliente) throws Throwable {
+    public Contato listarContatos(@PathVariable int idCliente) throws Throwable {
         return servico.listarContatos(idCliente);
     }
     

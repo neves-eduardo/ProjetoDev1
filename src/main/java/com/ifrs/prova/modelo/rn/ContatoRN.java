@@ -19,7 +19,7 @@ public class ContatoRN implements RegraNegocio<Contato>{
             throw new QuebraRegraNegocio("2001-:-" + "  Campo Nome é obrigatório"); 
        } else if (entidade.getEmail()==null){
             throw new QuebraRegraNegocio("2001-:-" + "  Campo E-mail é um campo obrigatório");
-        } else if (entidade.getEmail().contains("@")){
+        } else if (!entidade.getEmail().contains("@")){
             throw new QuebraRegraNegocio("2002-:-" + "  Campo E-mail deve ser um email válido");
         }
     }

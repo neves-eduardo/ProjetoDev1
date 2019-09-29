@@ -22,11 +22,11 @@ public class ProjetoRN implements RegraNegocio<Projeto> {
     @Override
     public void validarCadastrar(Projeto entidade) {
         if(entidade.getNome()==null) {
-            throw new QuebraRegraNegocio("3003-:-" + "  Nome é um campo obrigatório"); 
+            throw new QuebraRegraNegocio("3001-:-" + "  Nome é um campo obrigatório");
        } else if (entidade.getLinguagem()==null){
-            throw new QuebraRegraNegocio("3003-:-" + "  Linguagem é um campo obrigatório");
+            throw new QuebraRegraNegocio("3001-:-" + "  Linguagem é um campo obrigatório");
         } else if (entidade.getHorasPrevistas()== 0){
-            throw new QuebraRegraNegocio("3003-:-" + "  Horas Previstas  é um campo obrigatório");
+            throw new QuebraRegraNegocio("3001-:-" + "  Horas Previstas  é um campo obrigatório");
         } else if (entidade.getHorasExecutadas()!= 0){
             throw new QuebraRegraNegocio("3002-:-" + "  Horas Executadas  não podem ser definidas na criação");
         } else if (entidade.getAtividades().isEmpty()) {
